@@ -31,7 +31,7 @@ Ready with required parameters
 | `store.apiKey` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Store API key for authorization |
 | `store.invId` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` / `int` | Unique invoice reference ID (`inv_id`) |
 | `customer.name` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` | Customer's full name (`currentName`) |
-| `customer.id` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Unique customer client ID (e.g., `"abclient"`) |
+| `customer.id` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Unique customer client ID |
 | `customer.email` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Customer email address |
 | `customer.address` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Customer physical address |
 | `customer.phone` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` / `int` | Customer phone number |

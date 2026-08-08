@@ -26,17 +26,14 @@ Ready with required parameters
 | Name | Importance | Data Type | Value / Description |
 | :--- | :--- | :--- | :--- |
 | `onlineMode` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `bool` | Set to `true` or `false` for online mode |
-| `store` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `JSON` | Object containing merchant store credentials |
 | `store.merchantId` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` | Unique merchant identifier (`currentMerchantId`) |
 | `store.apiKey` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Store API key for authorization |
 | `store.invId` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` / `int` | Unique invoice reference ID (`inv_id`) |
-| `customer` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `JSON` | Object containing customer details |
 | `customer.name` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` | Customer's full name (`currentName`) |
 | `customer.id` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Unique customer client ID (e.g., `"abclient"`) |
 | `customer.email` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Customer email address |
 | `customer.address` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Customer physical address |
 | `customer.phone` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` / `int` | Customer phone number |
-| `checkout` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `JSON` | Object containing payment details |
 | `checkout.amount` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `int` / `float` | Total payment amount (`currentAmount`) |
 | `checkout.description` | <a href="#"><img src="https://img.shields.io/badge/optional-blue"></a> | `str` | Payment description string |
 | `checkout.successUrl` | <a href="#"><img src="https://img.shields.io/badge/mandatory-FF0000"></a> | `str` | Callback URL on successful payment |
@@ -46,27 +43,27 @@ Ready with required parameters
 #### Make a variable with above contents
 ```JS
 const payloadData = {
-                onlineMode: false,
-                store: {
-                    merchantId: currentMerchantId,
-                    apiKey: '',
-                    invId: inv_id,
-                },
-                customer: {
-                    name: currentName,
-                    id: "abclient",
-                    email: document.querySelector("#email").value,
-                    address: document.querySelector("#addr").value,
-                    phone: document.querySelector("#phone").value,
-                },
-                checkout: {
-                    amount: currentAmount,
-                    description: `Payment for order #${inv_id}`,
-                    successUrl: "http://127.0.0.1:5500/sandbox/success.html",
-                    cancelUrl: "http://127.0.0.1:5500/sandbox/error.html",
-                    metadata: null
-                }
-            };
+    onlineMode: false,
+    store: {
+        merchantId: "YOUR_MERCHANT_ID",
+        apiKey: "YOUR_API_KEY",
+        invId: "INV-88231",
+    },
+    customer: {
+        name: "John Doe",
+        id: "abclient",
+        email: "john.doe@example.com",
+        address: "123 Tech Street, Suite 400",
+        phone: "+8801xxxxxxxxx",
+    },
+    checkout: {
+        amount: 2500,
+        description: "A4TECH Wireless Keyboard.",
+        successUrl: "http://127.0.0.1:5500/sandbox/success.html",
+        cancelUrl: "http://127.0.0.1:5500/sandbox/error.html",
+        metadata: null
+    }
+};
 ```
 
 <p align="center">

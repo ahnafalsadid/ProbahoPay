@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probaho Pay — Payments that flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fafaf9;
+    --ink:#171513;
+    --ink-soft:#5c5652;
+    --red:#e0242c;
+    --red-deep:#a8141a;
+    --line:#e7e3df;
+    --panel:#f3f1ee;
+    --code-bg:#171513;
+    --code-text:#efe9e2;
+    --mandatory:#e0242c;
+    --optional:#2563a8;
+    --radius:2px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--red); color:#fff;}
+
+  a{color:inherit; text-decoration:none;}
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- FOCUS ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:3px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,250,249,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.15rem;
+    letter-spacing:-0.01em;
+  }
+  .brand .mark{
+    width:22px; height:22px;
+    position:relative;
+  }
+  .brand .mark svg{width:100%; height:100%; display:block;}
+  .nav-links{
+    display:flex; align-items:center; gap:36px;
+    font-size:0.88rem; font-weight:500;
+    color:var(--ink-soft);
+  }
+  .nav-links a{transition:color .15s ease;}
+  .nav-links a:hover{color:var(--red);}
+  .nav-cta{
+    border:1px solid var(--ink);
+    padding:9px 18px;
+    font-size:0.85rem; font-weight:600;
+    border-radius:var(--radius);
+    color:var(--ink);
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .nav-cta:hover{background:var(--ink); color:var(--paper);}
+  @media (max-width:760px){
+    .nav-links{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:120px 0 90px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--red-deep);
+    margin-bottom:28px;
+  }
+  .hero-eyebrow .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--red);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:0.35; transform:scale(0.7);}
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.6rem, 6vw, 5rem);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    max-width:15ch;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--red);
+  }
+  .hero-sub{
+    margin-top:26px;
+    max-width:46ch;
+    font-size:1.15rem;
+    color:var(--ink-soft);
+  }
+  .hero-sub b{color:var(--ink); font-weight:600;}
+  .hero-actions{
+    display:flex; align-items:center; gap:16px;
+    margin-top:40px;
+  }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--paper);
+    padding:14px 26px;
+    font-size:0.92rem; font-weight:600;
+    border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:8px;
+    transition:background .15s ease;
+  }
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-ghost{
+    padding:14px 22px;
+    font-size:0.92rem; font-weight:600;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--line);
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .btn-ghost:hover{color:var(--red); border-color:var(--red);}
+
+  .flow-signature{
+    position:absolute;
+    top:0; right:-6%;
+    width:640px; max-width:64vw;
+    height:100%;
+    opacity:0.9;
+    pointer-events:none;
+  }
+  @media (max-width:900px){
+    .flow-signature{display:none;}
+  }
+
+  .badge-row{
+    display:flex; gap:10px; flex-wrap:wrap;
+    margin-top:52px;
+  }
+  .pill{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    padding:6px 12px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    color:var(--ink-soft);
+    background:#fff;
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  .section{padding:96px 0; border-bottom:1px solid var(--line);}
+  .section-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:24px;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+  }
+  .section-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--red-deep);
+    margin-bottom:14px;
+    display:block;
+  }
+  .section-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(1.8rem, 3.2vw, 2.6rem);
+    letter-spacing:-0.01em;
+    max-width:20ch;
+  }
+  .section-head p{
+    color:var(--ink-soft);
+    max-width:40ch;
+    font-size:0.98rem;
+  }
+
+  /* ---------- FEATURES ---------- */
+  .features{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:800px){
+    .features{grid-template-columns:1fr;}
+  }
+  .feature{
+    background:var(--paper);
+    padding:36px 32px;
+  }
+  .feature .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--red);
+    margin-bottom:22px;
+    display:block;
+  }
+  .feature h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.28rem;
+    margin-bottom:12px;
+    letter-spacing:-0.01em;
+  }
+  .feature p{
+    color:var(--ink-soft);
+    font-size:0.95rem;
+  }
+
+  /* ---------- DOCS ---------- */
+  .docs-block{margin-bottom:64px;}
+  .docs-block:last-child{margin-bottom:0;}
+  .docs-step{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:18px;
+  }
+  .docs-step .step-no{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    color:var(--red);
+  }
+  .docs-step h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.4rem;
+    letter-spacing:-0.01em;
+  }
+  .docs-block > p{
+    color:var(--ink-soft);
+    margin-bottom:20px;
+    max-width:60ch;
+  }
+
+  pre{
+    background:var(--code-bg);
+    color:var(--code-text);
+    padding:22px 26px;
+    border-radius:var(--radius);
+    overflow-x:auto;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.84rem;
+    line-height:1.7;
+    position:relative;
+  }
+  pre::before{
+    content:attr(data-lang);
+    position:absolute;
+    top:14px; right:18px;
+    font-size:0.68rem;
+    color:#8a8378;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+  }
+  .tok-key{color:#f2b8b5;}
+  .tok-str{color:#c9dba0;}
+  .tok-num{color:#e8a25a;}
+  .tok-bool{color:#7fb5d6;}
+  .tok-null{color:#8a8378;}
+  .tok-comment{color:#6f6a60; font-style:italic;}
+  .tok-fn{color:#efe9e2; font-weight:600;}
+
+  /* ---------- TABLE ---------- */
+  .table-scroll{overflow-x:auto; border:1px solid var(--line);}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.87rem;
+    min-width:760px;
+  }
+  thead th{
+    text-align:left;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--ink-soft);
+    background:var(--panel);
+    padding:14px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  tbody td{
+    padding:14px 18px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fbf9f7;}
+  code.field{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.84rem;
+    color:var(--red-deep);
+    background:#fbeceb;
+    padding:2px 6px;
+    border-radius:3px;
+  }
+  .req{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:20px;
+  }
+  .req.mandatory{background:#fbeceb; color:var(--mandatory);}
+  .req.optional{background:#eaf1f9; color:var(--optional);}
+  code.type{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- STACK STRIP ---------- */
+  .stack-strip{
+    display:flex; gap:14px; flex-wrap:wrap;
+    padding:28px 0 0;
+  }
+  .stack-chip{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    padding:10px 16px;
+    border-radius:20px;
+    font-size:0.85rem;
+    font-weight:500;
+  }
+  .stack-chip .sw{width:8px; height:8px; border-radius:50%;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:64px 0 40px;
+  }
+  .footer-flow{
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--red), transparent);
+    margin-bottom:48px;
+  }
+  .footer-grid{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:24px;
+  }
+  .footer-word{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+  }
+  .footer-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    text-align:right;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">
+      <span class="mark">
+        <img src="https://i.postimg.cc/nLzm883Y/probahopay-1c.png">  
+      </span>
+      Probaho Pay
+    </div>
+    <div class="nav-links">
+      <a href="#features">Why Probaho</a>
+      <a href="#docs">Documentation</a>
+      <a href="#reference">Reference</a>
+    </div>
+    <a href="#docs" class="nav-cta">Get started</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="dot"></span>v1.0 — now shipping</div>
+    <h1>Payments that <em>flow</em>,<br>built for Bangladesh.</h1>
+    <p class="hero-sub">Probaho — <b>প্রবাহ</b>, meaning "flow" — is a lightweight checkout SDK that gets money from your customer to your store without the friction. Drop it in, define a session, done.</p>
+    <div class="hero-actions">
+      <a href="#docs" class="btn-primary">Read the docs →</a>
+      <a href="#reference" class="btn-ghost">View parameter reference</a>
+    </div>
+    <div class="badge-row">
+      <span class="pill">JavaScript</span>
+      <span class="pill">Backend: Supabase</span>
+      <span class="pill">MIT Licensed</span>
+    </div>
+  </div>
+
+  <svg class="flow-signature" viewBox="0 0 640 560" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M -20 120 C 100 60, 160 180, 280 120 C 400 60, 460 180, 580 120 C 660 80, 680 140, 700 120" stroke="#e0242c" stroke-width="1.4" opacity="0.5"/>
+    <path d="M -20 220 C 100 160, 160 280, 280 220 C 400 160, 460 280, 580 220 C 660 180, 680 240, 700 220" stroke="#e0242c" stroke-width="1.4" opacity="0.3"/>
+    <path d="M -20 320 C 100 260, 160 380, 280 320 C 400 260, 460 380, 580 320 C 660 280, 680 340, 700 320" stroke="#e0242c" stroke-width="2" opacity="0.85"/>
+    <path d="M -20 420 C 100 360, 160 480, 280 420 C 400 360, 460 480, 580 420 C 660 380, 680 440, 700 420" stroke="#e0242c" stroke-width="1.4" opacity="0.3"/>
+    <path d="M -20 520 C 100 460, 160 580, 280 520 C 400 460, 460 580, 580 520 C 660 480, 680 540, 700 520" stroke="#e0242c" stroke-width="1.4" opacity="0.5"/>
+    <circle cx="280" cy="320" r="5" fill="#e0242c"/>
+    <circle cx="580" cy="320" r="4" fill="#e0242c" opacity="0.6"/>
+  </svg>
+</section>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">Why Probaho</span>
+        <h2>One import, one session, one payment.</h2>
+      </div>
+      <p>Every design decision serves the same goal: get a checkout session running in minutes, not days.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <span class="num">01</span>
+        <h3>Minimal integration</h3>
+        <p>A single script import and one <code style="font-family:'JetBrains Mono',monospace;color:var(--red-deep);">.init()</code> call is enough to bring Probaho Pay into any storefront.</p>
+      </div>
+      <div class="feature">
+        <span class="num">02</span>
+        <h3>Structured sessions</h3>
+        <p>Store, customer and checkout details are grouped into a clear payload — nothing ambiguous about what's required and what isn't.</p>
+      </div>
+      <div class="feature">
+        <span class="num">03</span>
+        <h3>Built on Supabase</h3>
+        <p>A modern, reliable backend handles your transaction data, with success and cancel callbacks wired straight into your own URLs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="docs">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">Documentation</span>
+        <h2>Get a checkout running</h2>
+      </div>
+      <p>Two steps: bring in the script, then describe the payment you want to collect.</p>
+    </div>
+
+    <div class="docs-block">
+      <div class="docs-step"><span class="step-no">01</span><h3>Install</h3></div>
+      <p>Import the script, then initialize it once on page load.</p>
+      <pre data-lang="js"><span class="tok-fn">import</span> { probahopay } <span class="tok-fn">from</span> <span class="tok-str">""</span>;
+
+probahopay.<span class="tok-fn">init</span>();</pre>
+    </div>
+
+    <div class="docs-block">
+      <div class="docs-step"><span class="step-no">02</span><h3>Start a payment session</h3></div>
+      <p>Build a payload describing the mode, the store, the customer and the checkout — then hand it to Probaho Pay.</p>
+      <pre data-lang="js"><span class="tok-fn">const</span> payloadData = {
+    onlineMode: <span class="tok-bool">false</span>,
+    store: {
+        merchantId: <span class="tok-str">"YOUR_MERCHANT_ID"</span>,
+        apiKey: <span class="tok-str">"YOUR_API_KEY"</span>,
+        invId: <span class="tok-str">"INV-88231"</span>,
+    },
+    customer: {
+        name: <span class="tok-str">"John Doe"</span>,
+        id: <span class="tok-str">"abclient"</span>,
+        email: <span class="tok-str">"john.doe@example.com"</span>,
+        address: <span class="tok-str">"123 Tech Street, Suite 400"</span>,
+        phone: <span class="tok-str">"+8801xxxxxxxxx"</span>,
+    },
+    checkout: {
+        amount: <span class="tok-num">2500</span>,
+        description: <span class="tok-str">"A4TECH Wireless Keyboard."</span>,
+        successUrl: <span class="tok-str">"http://127.0.0.1:5500/sandbox/success.html"</span>,
+        cancelUrl: <span class="tok-str">"http://127.0.0.1:5500/sandbox/error.html"</span>,
+        metadata: <span class="tok-null">null</span>
+    }
+};</pre>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reference" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">Parameter reference</span>
+        <h2>Every field, at a glance</h2>
+      </div>
+      <p>Red means the session won't start without it. Blue means it's there when you need it.</p>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Requirement</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="field">onlineMode</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">bool</code></td><td>Set to <code class="type">true</code> or <code class="type">false</code> for online mode.</td></tr>
+          <tr><td><code class="field">store.merchantId</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str</code></td><td>Unique merchant identifier (<code class="type">currentMerchantId</code>).</td></tr>
+          <tr><td><code class="field">store.apiKey</code></td><td><span class="req optional">optional</span></td><td><code class="type">str</code></td><td>Store API key for authorization.</td></tr>
+          <tr><td><code class="field">store.invId</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str / int</code></td><td>Unique invoice reference ID (<code class="type">inv_id</code>).</td></tr>
+          <tr><td><code class="field">customer.name</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str</code></td><td>Customer's full name (<code class="type">currentName</code>).</td></tr>
+          <tr><td><code class="field">customer.id</code></td><td><span class="req optional">optional</span></td><td><code class="type">str</code></td><td>Unique customer client ID, e.g. <code class="type">"abclient"</code>.</td></tr>
+          <tr><td><code class="field">customer.email</code></td><td><span class="req optional">optional</span></td><td><code class="type">str</code></td><td>Customer email address.</td></tr>
+          <tr><td><code class="field">customer.address</code></td><td><span class="req optional">optional</span></td><td><code class="type">str</code></td><td>Customer physical address.</td></tr>
+          <tr><td><code class="field">customer.phone</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str / int</code></td><td>Customer phone number.</td></tr>
+          <tr><td><code class="field">checkout.amount</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">int / float</code></td><td>Total payment amount (<code class="type">currentAmount</code>).</td></tr>
+          <tr><td><code class="field">checkout.description</code></td><td><span class="req optional">optional</span></td><td><code class="type">str</code></td><td>Payment description string.</td></tr>
+          <tr><td><code class="field">checkout.successUrl</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str</code></td><td>Callback URL on successful payment.</td></tr>
+          <tr><td><code class="field">checkout.cancelUrl</code></td><td><span class="req mandatory">mandatory</span></td><td><code class="type">str</code></td><td>Callback URL on cancelled or failed payment.</td></tr>
+          <tr><td><code class="field">checkout.metadata</code></td><td><span class="req optional">optional</span></td><td><code class="type">JSON / null</code></td><td>Additional custom key-value data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stack-strip">
+      <div class="stack-chip"><span class="sw" style="background:#feda22;"></span>JavaScript</div>
+      <div class="stack-chip"><span class="sw" style="background:#3ECF8E;"></span>Supabase backend</div>
+      <div class="stack-chip"><span class="sw" style="background:#e0242c;"></span>Version 1.0</div>
+      <div class="stack-chip"><span class="sw" style="background:#2563a8;"></span>MIT License</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-flow"></div>
+    <div class="footer-grid">
+      <div class="footer-word">প্রবাহ — the flow continues.</div>
+      <div class="footer-meta">PROBAHO PAY &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; MIT LICENSE<br>Made for Bangladesh</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

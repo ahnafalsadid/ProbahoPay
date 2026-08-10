@@ -66,6 +66,36 @@ const payloadData = {
     }
 };
 ```
+#### Initialize payment
+```JS
+let payRes = await probahopay.initPay(api, payLoadData)
+```
+
+
+#### The output from payRes
+```JSON
+
+{
+    "status": , 
+    /*  * "pending" = Payment is pending, 
+        * "paid" = payment is validated, 
+        * "cencelled" = user's cancellation, 
+        * "error" = error on payment handling. 
+    */
+    "failedreason": ,
+    /*
+        * "ID: PPX0375" = Database connection error
+        * "ID: PPX0388" = Session generation failed
+        * "ID: PPX0459" = Input failure detected
+    */ 
+    "sessionkey": ,
+    "redirectGatewayURL": ,
+    "storeName": ,
+    "storeLogo": ,
+    "desc": ,
+}
+
+```
 
 <p align="center">
   <a href="#"><img src="https://i.postimg.cc/xdtvQwgv/footer.jpg"/></a>
